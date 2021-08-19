@@ -140,10 +140,17 @@ resource "azurerm_virtual_machine" "radditvm" {
   #    public_key = file("~/.ssh/raddit-user.pub")
   #  }
 
+  # Copy bash script to execute
   provisioner "file" {
     source = "https://github.com/vietpham123/IaC-raddit/blob/806412da1d56564dc1923eb8e3a1bbf1e1c22710/deploy.sh"
     destination = "/home/raddit-user"
   }
+  
+  # change permission of bash script and execute
+  inline = [
+    "chmod +x /home/raddit-user/deploy.sh",
+    "sudo /home/raddit-user/deploy.sh",
+  ]
 }
 output "public_ip" {
   value = azurerm_public_ip.myterraformpublicip.ip_address
