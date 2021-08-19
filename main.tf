@@ -11,6 +11,16 @@ provider "azurerm" {
   features {}
 }
 
+variable "user_name" {
+  type = string
+  default = ""
+}
+
+variable "user_password" {
+  type = string
+  default = ""
+}
+
 # Locate existing Packer Image
 data "azurerm_image" "search" {
   name                = "raddit-base-ISO"
