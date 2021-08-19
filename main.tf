@@ -149,7 +149,7 @@ resource "azurerm_virtual_machine" "radditvm" {
       type = "ssh"
       user = "raddit-user"
       password = "Hash!123"
-      host = "azurerm_public_ip.myterraformpublicip.name"
+      host = "azurerm_public_ip.myterraformpublicip.ip_address"
       port = "22"
       timeout = "1m"
     }
