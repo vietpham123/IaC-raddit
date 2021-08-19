@@ -152,6 +152,7 @@ resource "azurerm_virtual_machine" "radditvm" {
     "chmod +x /home/raddit-user/deploy.sh",
     "sudo /home/raddit-user/deploy.sh",
   ]
+  }
 }
 output "public_ip" {
   value = azurerm_public_ip.myterraformpublicip.ip_address
