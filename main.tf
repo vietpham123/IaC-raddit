@@ -127,8 +127,8 @@ resource "azurerm_virtual_machine" "radditvm" {
 
   os_profile {
     computer_name  = "raddit-instance"
-    admin_username = ${var.user_name}
-    admin_password = ${var.user_password}
+    admin_username = var.user_name
+    admin_password = var.user_password
   }
 
   os_profile_linux_config {
