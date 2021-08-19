@@ -139,8 +139,12 @@ resource "azurerm_virtual_machine" "radditvm" {
   #    username   = "raddit-user"
   #    public_key = file("~/.ssh/raddit-user.pub")
   #  }
-}
 
+  provisioner "file" {
+    source = "https://github.com/vietpham123/IaC-raddit/blob/806412da1d56564dc1923eb8e3a1bbf1e1c22710/deploy.sh"
+    destination = "/home/raddit-user"
+  }
+}
 output "public_ip" {
   value = azurerm_public_ip.myterraformpublicip.ip_address
 }
