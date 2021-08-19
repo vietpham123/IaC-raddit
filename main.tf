@@ -144,6 +144,14 @@ resource "azurerm_virtual_machine" "radditvm" {
   provisioner "file" {
     source = "https://github.com/vietpham123/IaC-raddit/blob/806412da1d56564dc1923eb8e3a1bbf1e1c22710/deploy.sh"
     destination = "/home/raddit-user"
+    
+    connection {
+      type = "ssh"
+      user = "raddit-user"
+      password = "Hash!123"
+      host = "azurerm_public_ip.myterraformpublicip.name"
+      port = "22"
+      timeout = "1m"
   }
   
   # change permission of bash script and execute
