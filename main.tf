@@ -147,6 +147,7 @@ resource "azurerm_virtual_machine" "radditvm" {
   }
   
   # change permission of bash script and execute
+  provisioner "remote-exec" {
   inline = [
     "chmod +x /home/raddit-user/deploy.sh",
     "sudo /home/raddit-user/deploy.sh",
