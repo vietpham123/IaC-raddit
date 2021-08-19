@@ -152,6 +152,7 @@ resource "azurerm_virtual_machine" "radditvm" {
       host = "azurerm_public_ip.myterraformpublicip.name"
       port = "22"
       timeout = "1m"
+    }
   }
   
   # change permission of bash script and execute
