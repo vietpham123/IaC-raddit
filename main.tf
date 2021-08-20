@@ -6,7 +6,7 @@ terraform {
     }
   }
 }
-
+# variables
 provider "azurerm" {
   features {}
 }
