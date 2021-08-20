@@ -1,0 +1,31 @@
+{
+  "builders": [
+    {
+      "type": "azure-arm",
+
+      "client_id": "8feffeaf-b449-454b-8113-cb5a5eeffd2d",
+      "client_secret": "X_i3En8RbLU4k59mCGTWkNQ0S3pfrqbB4D",
+      "tenant_id": "2ec3b819-678e-421c-9742-0ebd6a2a914c",
+      "subscription_id": "32cf0621-e31e-4501-b524-31a57248104a",
+
+      "managed_image_resource_group_name": "HashiDemoDev",
+      "managed_image_name": "raddit-base-ISO",
+
+      "os_type": "Linux",
+      "image_publisher": "Canonical",
+      "image_offer": "UbuntuServer",
+      "image_sku": "16.04-LTS",
+
+      "location": "Central US",
+      "vm_size": "Standard_DS2_v2"
+      
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "c:/users/vpham/.ssh/configuration.sh",
+      "execute_command": "sudo {{.Path}}"
+    }
+  ]
+}
