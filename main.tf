@@ -33,7 +33,7 @@ variable "hashiregion" {
 
 # Locate existing Packer Image
 data "azurerm_image" "search" {
-  name                = "raddit-base-ISO2"
+  name                = "raddit-base-ISO"
   resource_group_name = var.hashirg
 }
 
