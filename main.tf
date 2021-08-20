@@ -21,10 +21,20 @@ variable "user_password" {
   default = ""
 }
 
+variable "hashirg" {
+  type = string
+  default = ""
+}
+
+variable "hashiregion" {
+  type = string
+  default = ""
+}
+
 # Locate existing Packer Image
 data "azurerm_image" "search" {
   name                = "raddit-base-ISO2"
-  resource_group_name = "HashiDemo"
+  resource_group_name = var.hashirg
 }
 
 output "image_id" {
@@ -35,8 +45,8 @@ output "image_id" {
 resource "azurerm_virtual_network" "myterraformnetwork" {
   name                = "myVnet"
   address_space       = ["10.0.0.0/16"]
-  location            = "centralus"
-  resource_group_name = "HashiDemo"
+  location            = var.hashiregion
+  resource_group_name = var.hashirg
 
   tags = {
     environment = "Terraform Demo"
@@ -46,7 +56,7 @@ resource "azurerm_virtual_network" "myterraformnetwork" {
 # Create subnet
 resource "azurerm_subnet" "myterraformsubnet" {
   name                 = "mySubnet"
-  resource_group_name  = "HashiDemo"
+  resource_group_name  = var.hashirg
   virtual_network_name = azurerm_virtual_network.myterraformnetwork.name
   address_prefixes     = ["10.0.1.0/24"]
 }
@@ -54,8 +64,8 @@ resource "azurerm_subnet" "myterraformsubnet" {
 # Create Public IPs
 resource "azurerm_public_ip" "myterraformpublicip" {
   name                = "myPublicIP"
-  location            = "centralus"
-  resource_group_name = "HashiDemo"
+  location            = var.hashiregion
+  resource_group_name = var.hashirg
   allocation_method   = "Dynamic"
 }
 
@@ -64,8 +74,8 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 # Create Network Security Group and Rule
 resource "azurerm_network_security_group" "myterraformnsg" {
   name                = "MyNetworkSecurityGroup"
-  location            = "centralus"
-  resource_group_name = "HashiDemo"
+  location            = var.hashiregion
+  resource_group_name = var.hashirg
 
   security_rule {
     name                       = "SSH"
@@ -95,8 +105,8 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 # Create Network Interface
 resource "azurerm_network_interface" "hashinic" {
   name                = "HashiNIC"
-  location            = "centralus"
-  resource_group_name = "HashiDemo"
+  location            = var.hashiregion
+  resource_group_name = var.hashirg
   ip_configuration {
     name                          = "HashiNicConfiguration"
     subnet_id                     = azurerm_subnet.myterraformsubnet.id
@@ -116,8 +126,8 @@ resource "azurerm_network_interface_security_group_association" "myterraformnics
 # Create virtual machine
 resource "azurerm_virtual_machine" "radditvm" {
   name                  = "raddit-instance"
-  location              = "centralus"
-  resource_group_name   = "HashiDemo"
+  location              = var.hashiregion
+  resource_group_name   = var.hashirg
   network_interface_ids = [azurerm_network_interface.hashinic.id]
   vm_size               = "Standard_DS1_v2"
 
