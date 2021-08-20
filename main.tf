@@ -23,7 +23,7 @@ variable "user_password" {
 
 # Locate existing Packer Image
 data "azurerm_image" "search" {
-  name                = "raddit-base-ISO"
+  name                = "raddit-base-ISO2"
   resource_group_name = "HashiDemo"
 }
 
