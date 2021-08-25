@@ -31,10 +31,6 @@ variable "hashiregion" {
   default = ""
 }
 
-resource "random_id" "server" {
-  byte_length = 8
-}
-
 # Locate existing Packer Image
 data "azurerm_image" "search" {
   name                = "raddit-base-ISO"
@@ -46,8 +42,8 @@ output "image_id" {
 }
 
 # Create virtual network
-resource "azurerm_virtual_network" "myterraformnetwork" {
-  name                = "myVnet"
+resource "azurerm_virtual_network" "hashinet" {
+  name                = "vpVnet"
   address_space       = ["10.0.0.0/16"]
   location            = var.hashiregion
   resource_group_name = var.hashirg
@@ -58,16 +54,16 @@ resource "azurerm_virtual_network" "myterraformnetwork" {
 }
 
 # Create subnet
-resource "azurerm_subnet" "myterraformsubnet" {
-  name                 = "mySubnet"
+resource "azurerm_subnet" "hashisubnet" {
+  name                 = "vpSubnet"
   resource_group_name  = var.hashirg
   virtual_network_name = azurerm_virtual_network.myterraformnetwork.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
 # Create Public IPs
-resource "azurerm_public_ip" "myterraformpublicip" {
-  name                = "myPublicIP"
+resource "azurerm_public_ip" "hashipubip" {
+  name                = "vpPublicIP"
   location            = var.hashiregion
   resource_group_name = var.hashirg
   allocation_method   = "Dynamic"
@@ -76,8 +72,8 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 
 
 # Create Network Security Group and Rule
-resource "azurerm_network_security_group" "myterraformnsg" {
-  name                = "MyNetworkSecurityGroup"
+resource "azurerm_network_security_group" "hashinsg" {
+  name                = "vpNetworkSecurityGroup"
   location            = var.hashiregion
   resource_group_name = var.hashirg
 
@@ -108,14 +104,14 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 
 # Create Network Interface
 resource "azurerm_network_interface" "hashinic" {
-  name                = "HashiNIC"
+  name                = "vpNIC"
   location            = var.hashiregion
   resource_group_name = var.hashirg
   ip_configuration {
-    name                          = "HashiNicConfiguration"
-    subnet_id                     = azurerm_subnet.myterraformsubnet.id
+    name                          = "vpNicConfiguration"
+    subnet_id                     = azurerm_subnet.hashisubnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
+    public_ip_address_id          = azurerm_public_ip.hashipublicip.id
   }
   depends_on = [
     azurerm_subnet.myterraformsubnet
@@ -124,16 +120,15 @@ resource "azurerm_network_interface" "hashinic" {
 
 resource "azurerm_network_interface_security_group_association" "myterraformnicsgass" {
   network_interface_id      = azurerm_network_interface.hashinic.id
-  network_security_group_id = azurerm_network_security_group.myterraformnsg.id
+  network_security_group_id = azurerm_network_security_group.hashinsg.id
 }
 
 # Create virtual machine
 resource "azurerm_virtual_machine" "radditvm" {
-  name                  = "raddit-instance-${random_id.server.hex}"
+  name                  = "raddit-instance"
   location              = var.hashiregion
   resource_group_name   = var.hashirg
   network_interface_ids = [azurerm_network_interface.hashinic.id]
-  count                 = 2
   vm_size               = "Standard_DS1_v2"
 
   delete_os_disk_on_termination    = "true"
@@ -159,28 +154,21 @@ resource "azurerm_virtual_machine" "radditvm" {
   os_profile_linux_config {
     disable_password_authentication = false
   }
+}
 
-  #  admin_ssh_key {
-  #    username   = "raddit-user"
-  #    public_key = file("~/.ssh/raddit-user.pub")
-  #  }
-
-  #provisioner "remote-exec" {
-  #  inline = [
-  #    "echo #!/bin/bash >> /home/raddit-user/deploy.sh",
-  #    "echo set -e >> /home/raddit-user/deploy.sh",
-  #    "echo ---- clone application repository ---- >> /home/raddit-user/deploy.sh",
-  #    "echo git clone https://github.com/Artemmkin/raddit.git >> /home/raddit-user/deploy.sh",
-  #    "echo ---- install dependent gems ---- >> /home/raddit-user/deploy.sh",
-  #    "echo cd ./raddit >> /home/raddit-user/deploy.sh",
-  #    "echo sudo bundle install" >> /home/raddit-user/deploy.sh",
-  #    "echo ---- start the application ---- >> /home/raddit-user/deploy.sh",
-  #    "echo sudo systemctl start raddit >> /home/raddit-user/deploy.sh",
-  #    "echo sudo systemctl enable raddit >> /home/raddit-user/deploy.sh",
-  #    "chmod +x /home/raddit-user/deploy.sh",
-  #    "sudo /home/raddit-user/deploy.sh",
-  #  ]
- # }
+resource "null_resource" remoteExecProvisionerWFolder {
+  provisioner "file" {
+    source = "https://github.com/vietpham123/IaC-raddit/blob/a964fee4c6f5b70d0aacd8986e3231f6c00e3c5c/deploy.sh"
+    destination = "/home/raddit-user/deploy.sh"
+  }
+  
+  connection {
+    host = "${azurerm_virtual_machine.radditvm.ip_address}"
+    type = "ssh"
+    user = "${var.user_name}"
+    password = "${var.user_password}"
+    agent = "false"
+  }
 }
 
 output "public_ip" {
