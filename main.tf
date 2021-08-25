@@ -129,6 +129,7 @@ resource "azurerm_virtual_machine" "radditvm" {
   location              = var.hashiregion
   resource_group_name   = var.hashirg
   network_interface_ids = [azurerm_network_interface.hashinic.id]
+  count                 = 2
   vm_size               = "Standard_DS1_v2"
 
   delete_os_disk_on_termination    = "true"
