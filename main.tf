@@ -162,16 +162,16 @@ resource "azurerm_virtual_machine" "radditvm" {
 
   provisioner "remote-exec" {
     inline = [
-      "echo "#!/bin/bash" >> /home/raddit-user/deploy.sh",
-      "echo "set -e" >> /home/raddit-user/deploy.sh",
-      "echo "---- clone application repository ----" >> /home/raddit-user/deploy.sh",
-      "echo "git clone https://github.com/Artemmkin/raddit.git" >> /home/raddit-user/deploy.sh",
-      "echo "---- install dependent gems ----" >> /home/raddit-user/deploy.sh",
-      "echo "cd ./raddit" >> /home/raddit-user/deploy.sh",
-      "echo "sudo bundle install" >> /home/raddit-user/deploy.sh",
-      "echo "---- start the application ----" >> /home/raddit-user/deploy.sh",
-      "echo "sudo systemctl start raddit" >> /home/raddit-user/deploy.sh",
-      "echo "sudo systemctl enable raddit" >> /home/raddit-user/deploy.sh",
+      "echo #!/bin/bash >> /home/raddit-user/deploy.sh",
+      "echo set -e >> /home/raddit-user/deploy.sh",
+      "echo ---- clone application repository ---- >> /home/raddit-user/deploy.sh",
+      "echo git clone https://github.com/Artemmkin/raddit.git >> /home/raddit-user/deploy.sh",
+      "echo ---- install dependent gems ---- >> /home/raddit-user/deploy.sh",
+      "echo cd ./raddit >> /home/raddit-user/deploy.sh",
+      "echo sudo bundle install" >> /home/raddit-user/deploy.sh",
+      "echo ---- start the application ---- >> /home/raddit-user/deploy.sh",
+      "echo sudo systemctl start raddit >> /home/raddit-user/deploy.sh",
+      "echo sudo systemctl enable raddit >> /home/raddit-user/deploy.sh",
       "chmod +x /home/raddit-user/deploy.sh",
       "sudo /home/raddit-user/deploy.sh"
     ]
