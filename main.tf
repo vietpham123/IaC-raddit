@@ -161,17 +161,17 @@ output "public_ip" {
 }
 
 
-resource "null_resource" "fileupload" {
-  provisioner "file" {
-    source = "https://github.com/vietpham123/IaC-raddit/blob/a964fee4c6f5b70d0aacd8986e3231f6c00e3c5c/deploy.sh"
-    destination = "/home/raddit-user/deploy.sh"
-  }
+# resource "null_resource" "fileupload" {
+# provisioner "file" {
+#    source = "https://drive.google.com/file/d/1iqi7OIu7DGZB8MoUvvmtS25FeV27fIwg/view?usp=sharing"
+#    destination = "/home/raddit-user/deploy.sh"
+#  }
 
-  connection {
-    host = "${azurerm_public_ip.hashipubip.ip_address}"
-    type = "ssh"
-    user = "${var.user_name}"
-    password = "${var.user_password}"
-    agent = "false"
-  }
-}
+#  connection {
+#    host = "${azurerm_public_ip.hashipubip.ip_address}"
+#    type = "ssh"
+#    user = "${var.user_name}"
+#    password = "${var.user_password}"
+#    agent = "false"
+#  }
+# }
