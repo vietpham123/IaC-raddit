@@ -159,18 +159,3 @@ resource "azurerm_virtual_machine" "radditvm" {
 output "public_ip" {
  value = azurerm_public_ip.hashipubip.ip_address
 }
-
-resource "null_resource" "fileupload" {
-  provisioner "file" {
-    source = "https://drive.google.com/file/d/1iqi7OIu7DGZB8MoUvvmtS25FeV27fIwg/view?usp=sharing"
-    destination = "/home/raddit-user/deploy.sh"
-  }
-
-  connection {
-    host = "${azurerm_public_ip.hashipubip.ip_address}"
-    type = "ssh"
-    user = "${var.user_name}"
-    password = "${var.user_password}"
-    agent = "false"
-  }
-}
