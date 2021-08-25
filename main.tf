@@ -114,7 +114,7 @@ resource "azurerm_network_interface" "hashinic" {
     public_ip_address_id          = azurerm_public_ip.hashipublicip.id
   }
   depends_on = [
-    azurerm_subnet.myterraformsubnet
+    azurerm_subnet.hashisubnet
   ]
 }
 
@@ -172,5 +172,5 @@ resource "null_resource" remoteExecProvisionerWFolder {
 }
 
 output "public_ip" {
-  value = azurerm_public_ip.myterraformpublicip.ip_address
+  value = azurerm_public_ip.hashipublicip.ip_address
 }
