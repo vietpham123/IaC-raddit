@@ -57,7 +57,7 @@ resource "azurerm_virtual_network" "hashinet" {
 resource "azurerm_subnet" "hashisubnet" {
   name                 = "vpSubnet"
   resource_group_name  = var.hashirg
-  virtual_network_name = azurerm_virtual_network.myterraformnetwork.name
+  virtual_network_name = azurerm_virtual_network.hashinet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
@@ -118,7 +118,7 @@ resource "azurerm_network_interface" "hashinic" {
   ]
 }
 
-resource "azurerm_network_interface_security_group_association" "myterraformnicsgass" {
+resource "azurerm_network_interface_security_group_association" "hashinicsgass" {
   network_interface_id      = azurerm_network_interface.hashinic.id
   network_security_group_id = azurerm_network_security_group.hashinsg.id
 }
