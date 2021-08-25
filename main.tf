@@ -31,6 +31,10 @@ variable "hashiregion" {
   default = ""
 }
 
+resource "random_id" "server" {
+  byte_length = 8
+}
+
 # Locate existing Packer Image
 data "azurerm_image" "search" {
   name                = "raddit-base-ISO"
@@ -125,7 +129,7 @@ resource "azurerm_network_interface_security_group_association" "myterraformnics
 
 # Create virtual machine
 resource "azurerm_virtual_machine" "radditvm" {
-  name                  = "raddit-instance"
+  name                  = "raddit-instance-${random_id.server.hex}"
   location              = var.hashiregion
   resource_group_name   = var.hashirg
   network_interface_ids = [azurerm_network_interface.hashinic.id]
