@@ -173,7 +173,7 @@ resource "azurerm_virtual_machine" "radditvm" {
       "echo sudo systemctl start raddit >> /home/raddit-user/deploy.sh",
       "echo sudo systemctl enable raddit >> /home/raddit-user/deploy.sh",
       "chmod +x /home/raddit-user/deploy.sh",
-      "sudo /home/raddit-user/deploy.sh"
+      "sudo /home/raddit-user/deploy.sh",
     ]
   }
 }
