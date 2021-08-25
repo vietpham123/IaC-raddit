@@ -156,21 +156,22 @@ resource "azurerm_virtual_machine" "radditvm" {
   }
 }
 
+output "public_ip" {
+ value = azurerm_public_ip.hashipubip.ip_address
+}
+
+
 resource "null_resource" remoteExecProvisionerWFolder {
   provisioner "file" {
     source = "https://github.com/vietpham123/IaC-raddit/blob/a964fee4c6f5b70d0aacd8986e3231f6c00e3c5c/deploy.sh"
     destination = "/home/raddit-user/deploy.sh"
   }
-  
+
   connection {
-    host = "${azurerm_virtual_machine.radditvm.ip_address}"
+    host = "${azurerm_public_ip.hashipubip.ip_address}"
     type = "ssh"
     user = "${var.user_name}"
     password = "${var.user_password}"
     agent = "false"
   }
-}
-
-output "public_ip" {
-  value = azurerm_public_ip.hashipubip.ip_address
 }
