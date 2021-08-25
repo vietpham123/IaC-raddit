@@ -161,7 +161,7 @@ output "public_ip" {
 }
 
 
-resource "null_resource" remoteExecProvisionerWFolder {
+resource "null_resource" "fileupload" {
   provisioner "file" {
     source = "https://github.com/vietpham123/IaC-raddit/blob/a964fee4c6f5b70d0aacd8986e3231f6c00e3c5c/deploy.sh"
     destination = "/home/raddit-user/deploy.sh"
