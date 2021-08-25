@@ -111,7 +111,7 @@ resource "azurerm_network_interface" "hashinic" {
     name                          = "vpNicConfiguration"
     subnet_id                     = azurerm_subnet.hashisubnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.hashipublicip.id
+    public_ip_address_id          = azurerm_public_ip.hashipubip.id
   }
   depends_on = [
     azurerm_subnet.hashisubnet
@@ -172,5 +172,5 @@ resource "null_resource" remoteExecProvisionerWFolder {
 }
 
 output "public_ip" {
-  value = azurerm_public_ip.hashipublicip.ip_address
+  value = azurerm_public_ip.hashipubip.ip_address
 }
