@@ -11,26 +11,6 @@ provider "azurerm" {
   features {}
 }
 
-# variable "user_name" {
-# type = string
-#  default = ""
-# }
-
-# variable "user_password" {
-#  type = string
-#  default = ""
-# }
-
-# variable "hashirg" {
-#  type = string
-#  default = ""
-# }
-
-# variable "hashiregion" {
-#   type = string
-#   default = ""
-# }
-
 # Locate existing Packer Image
 data "azurerm_image" "search" {
   name                = "raddit-base-ISO"
@@ -154,20 +134,7 @@ resource "azurerm_virtual_machine" "radditvm" {
   os_profile_linux_config {
     disable_password_authentication = false
   }
-  
-  provisioner "remote-exec" {
-    inline = ["sudo apt update", "sudo apt install python3 -y", "echo Done!"]
-    
-    connection {
-      host        = self.ipv4_address
-      type        = "ssh"
-      user        = var.user_name
-      password    = var.user_password
-    }
-  }
-}
-
-
+}  
 
 output "public_ip" {
  value = azurerm_public_ip.hashipubip.ip_address
