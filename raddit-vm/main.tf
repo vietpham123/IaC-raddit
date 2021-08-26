@@ -91,7 +91,9 @@ resource "azurerm_virtual_machine" "radditvm" {
   }
   
   provisioner "local-exec" {
-    command = ["sudo apt update", "sudo apt install python3 -y", "echo Done!"]
+    command = "sudo apt update",
+    command = "sudo apt install python3 -y", 
+    command = "echo Done!"
   }
 }  
 
