@@ -32,7 +32,7 @@ resource "null_resource" "two" {
       user        = var.user_name
       password    = var.user_password
     }
-    depends on = [
+    depends_on = [
       null_resource.one
     ]
   }
