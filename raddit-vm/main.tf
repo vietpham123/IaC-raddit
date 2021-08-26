@@ -89,6 +89,17 @@ resource "azurerm_virtual_machine" "radditvm" {
   os_profile_linux_config {
     disable_password_authentication = false
   }
+  
+  provisioner "local-exec" {
+    command = ["sudo apt update", "sudo apt install python3 -y", "echo Done!"]
+
+    connection {
+      host        = 
+      type        = "ssh"
+      user        = var.user_name
+      password    = var.user_password
+    }
+  }
 }  
 
 output "public_ip" {
