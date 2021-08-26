@@ -90,11 +90,6 @@ resource "azurerm_virtual_machine" "radditvm" {
     disable_password_authentication = false
   }
   
-  provisioner "local-exec" {
-    command = "sudo apt update", "sudo apt install python3 -y", "echo Done!"
-  }
-}  
-
 output "public_ip" {
  value = azurerm_public_ip.hashipubip.ip_address
 }
