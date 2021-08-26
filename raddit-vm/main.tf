@@ -11,6 +11,17 @@ provider "azurerm" {
   features {}
 }
 
+data "terraform_remote_state" "network" {
+  backend = "remote"
+  
+  config = {
+    organization = "Hashi-Demo"
+    workspaces = {
+      name = "Raddit-Network"
+    }
+  }
+}
+
 # Locate existing Packer Image
 data "azurerm_image" "search" {
   name                = "raddit-base-ISO"
@@ -33,14 +44,6 @@ resource "azurerm_virtual_network" "hashinet" {
   }
 }
 
-# Create subnet
-resource "azurerm_subnet" "hashisubnet" {
-  name                 = "vpSubnet"
-  resource_group_name  = var.hashirg
-  virtual_network_name = azurerm_virtual_network.hashinet.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
-
 # Create Public IPs
 resource "azurerm_public_ip" "hashipubip" {
   name                = "vpPublicIP"
@@ -48,8 +51,6 @@ resource "azurerm_public_ip" "hashipubip" {
   resource_group_name = var.hashirg
   allocation_method   = "Dynamic"
 }
-
-
 
 # Create Network Security Group and Rule
 resource "azurerm_network_security_group" "hashinsg" {
@@ -89,7 +90,7 @@ resource "azurerm_network_interface" "hashinic" {
   resource_group_name = var.hashirg
   ip_configuration {
     name                          = "vpNicConfiguration"
-    subnet_id                     = azurerm_subnet.hashisubnet.id
+    subnet_id                     = data.terraform_remote_state.network.outputs.subnet_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.hashipubip.id
   }
