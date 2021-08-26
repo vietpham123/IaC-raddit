@@ -32,55 +32,12 @@ output "image_id" {
   value = "/subscriptions/32cf0621-e31e-4501-b524-31a57248104a/resourceGroups/HashiDemo/providers/Microsoft.Compute/images/raddit-base-ISO"
 }
 
-# Create virtual network
-resource "azurerm_virtual_network" "hashinet" {
-  name                = "vpVnet"
-  address_space       = ["10.0.0.0/16"]
-  location            = var.hashiregion
-  resource_group_name = var.hashirg
-
-  tags = {
-    environment = "Terraform Demo"
-  }
-}
-
 # Create Public IPs
 resource "azurerm_public_ip" "hashipubip" {
   name                = "vpPublicIP"
   location            = var.hashiregion
   resource_group_name = var.hashirg
   allocation_method   = "Dynamic"
-}
-
-# Create Network Security Group and Rule
-resource "azurerm_network_security_group" "hashinsg" {
-  name                = "vpNetworkSecurityGroup"
-  location            = var.hashiregion
-  resource_group_name = var.hashirg
-
-  security_rule {
-    name                       = "SSH"
-    priority                   = 1001
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
-  security_rule {
-    name                       = "raddit"
-    priority                   = 1002
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "9292"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
 }
 
 # Create Network Interface
@@ -90,7 +47,7 @@ resource "azurerm_network_interface" "hashinic" {
   resource_group_name = var.hashirg
   ip_configuration {
     name                          = "vpNicConfiguration"
-    subnet_id                     = data.terraform_remote_state.network.outputs.subnet_id
+    subnet_id                     = data.terraform_remote_state.network.outputs.subnet_name
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.hashipubip.id
   }
@@ -101,7 +58,7 @@ resource "azurerm_network_interface" "hashinic" {
 
 resource "azurerm_network_interface_security_group_association" "hashinicsgass" {
   network_interface_id      = azurerm_network_interface.hashinic.id
-  network_security_group_id = azurerm_network_security_group.hashinsg.id
+  network_security_group_id = data.terraform_remote_state.network.outputs.nsg
 }
 
 # Create virtual machine
@@ -109,7 +66,7 @@ resource "azurerm_virtual_machine" "radditvm" {
   name                  = "raddit-instance"
   location              = var.hashiregion
   resource_group_name   = var.hashirg
-  network_interface_ids = [azurerm_network_interface.hashinic.id]
+  network_interface_ids = azurerm_network_interface.hashinic.id
   vm_size               = "Standard_DS1_v2"
 
   delete_os_disk_on_termination    = "true"
