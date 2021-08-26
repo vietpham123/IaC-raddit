@@ -71,5 +71,5 @@ output "subnet_name" {
 }
 
 output "nsg" {
-    value = azurerm_network_security_group.name
+    value = azurerm_network_security_group.hashinsg.name
 }
