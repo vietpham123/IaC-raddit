@@ -67,9 +67,9 @@ output "virtual_network" {
 }
 
 output "subnet_name" {
-    value = azurerm_subnet.hashisubnet.name
+    value = azurerm_subnet.hashisubnet.id
 }
 
 output "nsg" {
-    value = azurerm_network_security_group.hashinsg.name
+    value = azurerm_network_security_group.hashinsg.id
 }
