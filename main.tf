@@ -6,30 +6,30 @@ terraform {
     }
   }
 }
-# variables
+
 provider "azurerm" {
   features {}
 }
 
-variable "user_name" {
-  type = string
-  default = ""
-}
+# variable "user_name" {
+# type = string
+#  default = ""
+# }
 
-variable "user_password" {
-  type = string
-  default = ""
-}
+# variable "user_password" {
+#  type = string
+#  default = ""
+# }
 
-variable "hashirg" {
-  type = string
-  default = ""
-}
+# variable "hashirg" {
+#  type = string
+#  default = ""
+# }
 
-variable "hashiregion" {
-  type = string
-  default = ""
-}
+# variable "hashiregion" {
+#   type = string
+#   default = ""
+# }
 
 # Locate existing Packer Image
 data "azurerm_image" "search" {
