@@ -62,6 +62,7 @@ resource "azurerm_network_security_group" "hashinsg" {
   }
 }
 
+# Outputs to use with VM building
 output "virtual_network" {
     value = azurerm_virtual_network.hashinet.name
 }
