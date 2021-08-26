@@ -51,9 +51,6 @@ resource "azurerm_network_interface" "hashinic" {
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.hashipubip.id
   }
-  depends_on = [
-    azurerm_subnet.hashisubnet
-  ]
 }
 
 resource "azurerm_network_interface_security_group_association" "hashinicsgass" {
