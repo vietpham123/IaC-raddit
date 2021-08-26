@@ -156,18 +156,17 @@ resource "azurerm_virtual_machine" "radditvm" {
   }
 }
 
-# provisioner "remote-exec" {
-#    inline = ["sudo apt update", "sudo apt install python3 -y", "echo Done!"]
+provisioner "remote-exec" {
+  inline = ["sudo apt update", "sudo apt install python3 -y", "echo Done!"]
 
-#    connection {
-#      host        = self.ipv4_address
-#      type        = "ssh"
-#      user        = var.user_name
-#      password    = var.user_password
-#    }
-#  }
+  connection {
+    host        = self.ipv4_address
+    type        = "ssh"
+    user        = var.user_name
+    password    = var.user_password
+  }
+}
 
 output "public_ip" {
  value = azurerm_public_ip.hashipubip.ip_address
 }
-# test comment
