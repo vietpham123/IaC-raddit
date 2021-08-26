@@ -38,7 +38,7 @@ data "terraform_remote_state" "vm" {
 #  }
 # }
 
-resource "null_resource" "load_file {
+resource "null_resource" "load_file" {
   
   provisioner "file" {
     source = "deploy.sh"
