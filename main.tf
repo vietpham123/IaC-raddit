@@ -136,6 +136,13 @@ resource "azurerm_virtual_machine" "radditvm" {
   }
 }  
 
+resource "time_sleep" "2_min_wait" {
+  depends_on = [azurerm_virtual_machine.radditvm]
+  create_duration = "120s"
+}
+
 output "public_ip" {
- value = azurerm_public_ip.hashipubip.ip_address
+  depends_on = [time_sleep.2_min_wait]
+  
+  value = azurerm_public_ip.hashipubip.ip_address
 }
